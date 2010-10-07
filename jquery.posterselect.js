@@ -47,7 +47,7 @@
                 popup.slider = $('<div></div>').addClass(
                         'posterselect-slider');
                 popup.slider.slider({
-                    min: 1,
+                    min: 0,
                     max: popup.video.length,
                     value: popup.initial_time,
                     slide: function(event, ui) {

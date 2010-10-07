@@ -51,7 +51,10 @@
                     max: popup.video.length,
                     value: popup.initial_time,
                     slide: function(event, ui) {
-                        popup.indicator.set($(this).slider('option', 'value'));
+                        popup.indicator.set(ui.value);
+                    },
+                    change: function(event, ui) {
+                        popup.indicator.set(ui.value);
                     }
                 });
                 popup.obj.append(popup.slider);

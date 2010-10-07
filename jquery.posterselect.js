@@ -31,21 +31,21 @@
                 popup.initial_time = (href_parts[1]) ? href_parts[1] : o.time;
 
                 // Create the popup object
-                popup.obj = $('<div></div>');
-                popup.obj.addClass('posterselect');
+                popup.obj = $('<div></div>').addClass('posterselect');
                 popup.obj.css('top', link.offset().top + link.height());
                 popup.obj.css('left', link.offset().left);
                 $('body').append(popup.obj);
                 popup.obj.fadeIn();
 
                 // Create the loading placeholder
-                popup.loading = $('<div></div>').html("Loading...");
-                popup.loading.addClass('posterselect-loading');
+                popup.loading = $('<div></div>').addClass(
+                        'posterselect-loading');
+                popup.loading.html("Loading...");
                 popup.obj.append(popup.loading);
 
                 // Create the slider
-                popup.slider = $('<div></div>');
-                popup.slider.addClass('posterselect-slider');
+                popup.slider = $('<div></div>').addClass(
+                        'posterselect-slider');
                 popup.slider.slider({
                     min: -1,
                     max: popup.video.length + 1,
@@ -74,14 +74,14 @@
                                 this.seconds)
                     }
                 }
-                popup.indicator.obj = $('<div></div>');
-                popup.indicator.obj.addClass('posterselect-indicator');
+                popup.indicator.obj = $('<div></div>').addClass(
+                        'posterselect-indicator');
                 popup.indicator.set(popup.initial_time);
                 popup.obj.append(popup.indicator.obj);
 
                 // Create the ok button
-                popup.ok = $('<a></a>').html("Ok");
-                popup.ok.addClass('posterselect-ok');
+                popup.ok = $('<a></a>').addClass('posterselect-ok');
+                popup.ok.html("Ok");
                 popup.ok.addClass('ui-widget-content');
                 popup.ok.attr('href', '#ok');
                 popup.obj.append(popup.ok);
@@ -91,8 +91,8 @@
                 }
 
                 // Create the cancel button
-                popup.cancel = $('<a></a>').html("Cancel");
-                popup.cancel.addClass('posterselect-cancel');
+                popup.cancel = $('<a></a>').addClass('posterselect-cancel');
+                popup.cancel.html("Cancel");
                 popup.cancel.attr('href', '#cancel');
                 popup.cancel.click(function(event) {
                     event.preventDefault();

@@ -47,8 +47,12 @@
                 popup.slider = $('<div></div>');
                 popup.slider.addClass('posterselect-slider');
                 popup.slider.slider({
-                    max: popup.video.length,
-                    value: popup.initial_time
+                    min: -1,
+                    max: popup.video.length + 1,
+                    value: popup.initial_time,
+                    slide: function(event, ui) {
+                        popup.indicator.set($(this).slider('option', 'value'));
+                    }
                 });
                 popup.obj.append(popup.slider);
 

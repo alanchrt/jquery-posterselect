@@ -5,13 +5,24 @@ div.posterselect {
     padding: 20px;
     background: #ffffff;
     border: #cccccc 1px solid;
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
     box-shadow: 3px 3px 10px #aaaaaa;
     -moz-box-shadow: 3px 3px 10px #aaaaaa;
     -webkit-box-shadow: 3px 3px 10px #aaaaaa;
     display: none;
+}
+
+div.posterselect div.posterselect-loading {
+    position: absolute;
+    width: 32px;
+    height: 0;
+    padding: 32px 0 0 0;
+    overflow: hidden;
+    top: 150px;
+    left: 184px;
+    background: url('graphics/loading.gif') no-repeat 0 0;
 }
 
 div.posterselect div.posterselect-slider {

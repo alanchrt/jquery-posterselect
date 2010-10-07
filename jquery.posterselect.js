@@ -29,6 +29,11 @@
                 $('body').append(this.obj);
                 this.obj.fadeIn();
 
+                // Create the loading placeholder
+                this.loading = $('<div></div>').html("Loading...");
+                this.loading.addClass('posterselect-loading');
+                this.obj.append(this.loading);
+
                 // Create the slider
                 this.slider = $('<div></div>');
                 this.slider.addClass('posterselect-slider');
@@ -42,6 +47,10 @@
                 this.ok.attr('href', '#ok');
                 this.obj.append(this.ok);
 
+                this.close = function() {
+                    this.obj.remove();
+                }
+
                 // Create the cancel button
                 this.cancel = $('<a></a>').html("Cancel");
                 this.cancel.addClass('posterselect-cancel');
@@ -51,10 +60,6 @@
                     popup.close();
                 });
                 this.obj.append(this.cancel);
-
-                this.close = function() {
-                    this.obj.remove();
-                }
             }
 
             // Apply plugin to each element

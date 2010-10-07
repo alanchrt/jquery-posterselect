@@ -31,6 +31,15 @@ div.posterselect div.posterselect-slider {
     top: 330px;
 }
 
+div.posterselect div.posterselect-indicator {
+    position: absolute;
+    top: 350px;
+    left: 20px;
+    height: 35px;
+    line-height: 35px;
+    color: #666666;
+}
+
 div.posterselect a.posterselect-ok {
     position: absolute;
     display: block;

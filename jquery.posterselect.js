@@ -18,48 +18,83 @@
 
             // A class for a popup window
             var Popup = function(link) {
-                // Create an alias for callbacks
+                var o = $.extend({}, options);
                 var popup = this;
 
+                // Store video information
+                var href_parts = link.attr('href').split('#');
+                popup.video = {
+                    url: href_parts[0],
+                    //length: null /* commented out for test data
+                    length: 30
+                }
+                popup.initial_time = (href_parts[1]) ? href_parts[1] : o.time;
+
                 // Create the popup object
-                this.obj = $('<div></div>');
-                this.obj.addClass('posterselect');
-                this.obj.css('top', link.offset().top + link.height());
-                this.obj.css('left', link.offset().left);
-                $('body').append(this.obj);
-                this.obj.fadeIn();
+                popup.obj = $('<div></div>');
+                popup.obj.addClass('posterselect');
+                popup.obj.css('top', link.offset().top + link.height());
+                popup.obj.css('left', link.offset().left);
+                $('body').append(popup.obj);
+                popup.obj.fadeIn();
 
                 // Create the loading placeholder
-                this.loading = $('<div></div>').html("Loading...");
-                this.loading.addClass('posterselect-loading');
-                this.obj.append(this.loading);
+                popup.loading = $('<div></div>').html("Loading...");
+                popup.loading.addClass('posterselect-loading');
+                popup.obj.append(popup.loading);
 
                 // Create the slider
-                this.slider = $('<div></div>');
-                this.slider.addClass('posterselect-slider');
-                this.slider.slider();
-                this.obj.append(this.slider);
+                popup.slider = $('<div></div>');
+                popup.slider.addClass('posterselect-slider');
+                popup.slider.slider({
+                    max: popup.video.length,
+                    value: popup.initial_time
+                });
+                popup.obj.append(popup.slider);
+
+                // Create the time indicator
+                popup.indicator = {
+                    set: function(seconds) {
+                        this.hours = String((seconds/3600)|0);
+                        this.minutes = String((seconds/60 - this.hours*60)|0);
+                        this.seconds = String(seconds % 60);
+                        if (this.hours.length == 1)
+                            this.hours = "0" + this.hours;
+                        if (this.minutes.length == 1)
+                            this.minutes = "0" + this.minutes;
+                        if (this.seconds.length == 1)
+                            this.seconds = "0" + this.seconds;
+
+                        this.obj.html("<strong>Position:</strong> " +
+                                this.hours + ":" + this.minutes + ":" +
+                                this.seconds)
+                    }
+                }
+                popup.indicator.obj = $('<div></div>');
+                popup.indicator.obj.addClass('posterselect-indicator');
+                popup.indicator.set(popup.initial_time);
+                popup.obj.append(popup.indicator.obj);
 
                 // Create the ok button
-                this.ok = $('<a></a>').html("Ok");
-                this.ok.addClass('posterselect-ok');
-                this.ok.addClass('ui-widget-content');
-                this.ok.attr('href', '#ok');
-                this.obj.append(this.ok);
+                popup.ok = $('<a></a>').html("Ok");
+                popup.ok.addClass('posterselect-ok');
+                popup.ok.addClass('ui-widget-content');
+                popup.ok.attr('href', '#ok');
+                popup.obj.append(popup.ok);
 
-                this.close = function() {
-                    this.obj.remove();
+                popup.close = function() {
+                    popup.obj.remove();
                 }
 
                 // Create the cancel button
-                this.cancel = $('<a></a>').html("Cancel");
-                this.cancel.addClass('posterselect-cancel');
-                this.cancel.attr('href', '#cancel');
-                this.cancel.click(function(event) {
+                popup.cancel = $('<a></a>').html("Cancel");
+                popup.cancel.addClass('posterselect-cancel');
+                popup.cancel.attr('href', '#cancel');
+                popup.cancel.click(function(event) {
                     event.preventDefault();
                     popup.close();
                 });
-                this.obj.append(this.cancel);
+                popup.obj.append(this.cancel);
             }
 
             // Apply plugin to each element

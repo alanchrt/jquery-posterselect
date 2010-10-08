@@ -44,6 +44,11 @@
                 $('body').append(popup.obj);
                 popup.obj.fadeIn();
 
+                popup.close = function() {
+                    // Close the popup
+                    popup.obj.remove();
+                }
+
                 // Create the loading placeholder
                 popup.loading = $('<div></div>').addClass(
                         'posterselect-loading');
@@ -107,11 +112,6 @@
                         popup.ok.addClass('ui-widget-content');
                         popup.ok.attr('href', '#ok');
                         popup.obj.append(popup.ok);
-
-                        popup.close = function() {
-                            // Close the popup
-                            popup.obj.remove();
-                        }
 
                         // Create the cancel button
                         popup.cancel = $('<a></a>').addClass(

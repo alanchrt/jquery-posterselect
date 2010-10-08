@@ -60,6 +60,7 @@
                         value: (href_parts[1]) ? href_parts[1] : o.time
                     },
                     init: function(duration) {
+                        // Create the slider object
                         popup.slider.obj = $('<div></div>').addClass(
                                 'posterselect-slider');
                         popup.slider.obj.slider({

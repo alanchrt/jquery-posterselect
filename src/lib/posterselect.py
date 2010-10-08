@@ -62,13 +62,13 @@ class Posterselect():
         """
         destination_url = self.extract(url, time)
         return """{
-            posterselect: {
-                video: {
-                    url: %(source_url)s,
-                    time: %(time)s
-                }
-                image: {
-                    url: %(destination_url)s
+            "posterselect": {
+                "video": {
+                    "url": "%(source_url)s",
+                    "time": "%(time)s"
+                },
+                "image": {
+                    "url": "%(destination_url)s"
                 }
             }
         }""" % {

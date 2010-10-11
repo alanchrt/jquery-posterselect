@@ -4,7 +4,9 @@
         popups: [],
         counter: 0,
         init_slider: function(index, duration) {
-            $.posterselect.popups[index].slider.init(duration);
+            var popup = $.posterselect.popups[index];
+            popup.slider.init(Math.floor(duration));
+            popup.videoduration.remove();
         }
     }
 
@@ -18,7 +20,8 @@
             var defaults = {
                 time: '2',
                 conversion_url: './?time=%s',
-                callback: function(image, time) {}
+                callback: function(image, time) {},
+                videoduration_swf: 'videoduration.swf'
             }
 
             // Override the defaults with user settings
@@ -41,7 +44,7 @@
                 popup.obj = $('<div></div>').addClass('posterselect');
                 popup.obj.css('top', link.offset().top + link.height());
                 popup.obj.css('left', link.offset().left);
-                $('body').append(popup.obj);
+                $(document.body).append(popup.obj);
                 popup.obj.fadeIn();
 
                 popup.close = function() {
@@ -125,6 +128,26 @@
                         popup.obj.append(popup.cancel);
                     }
                 }
+
+                // Add the video duration sniffer
+                popup.videoduration = $('<object></object');
+                popup.videoduration.attr('classid',
+                        'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
+                popup.videoduration.attr('codebase',
+                        'http://fpdownload.macromedia.com/pub/shockwave/' +
+                        'cabs/flash/swflash.cab#version=10,0,0,0')
+                popup.videoduration.attr('width', '1');
+                popup.videoduration.attr('height', '1');
+                popup.videoduration.append($('<param>').attr(
+                        'name', 'movie').attr('value', o.videoduration_swf));
+                popup.videoduration.append($('<param>').attr(
+                        'name', 'allowScriptAccess').attr('value', 'always'));
+                popup.videoduration.append($('<param>').attr(
+                        'name', 'flashVars').attr('value',
+                        'url=' + escape(popup.video.url) +
+                        '&callback=jQuery.posterselect.init_slider&index=' +
+                        $.posterselect.counter));
+                $(document.body).append(popup.videoduration);
             }
 
             // Apply plugin to each element

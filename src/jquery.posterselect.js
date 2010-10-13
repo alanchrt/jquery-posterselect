@@ -130,6 +130,9 @@
                 }
 
                 // Add the video duration sniffer
+                var flashvars = 'url=' + escape(popup.video.url) +
+                        '&callback=jQuery.posterselect.init_slider&index=' +
+                        $.posterselect.counter;
                 popup.videoduration = $('<object></object');
                 popup.videoduration.attr('classid',
                         'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
@@ -143,10 +146,11 @@
                 popup.videoduration.append($('<param>').attr(
                         'name', 'allowScriptAccess').attr('value', 'always'));
                 popup.videoduration.append($('<param>').attr(
-                        'name', 'flashVars').attr('value',
-                        'url=' + escape(popup.video.url) +
-                        '&callback=jQuery.posterselect.init_slider&index=' +
-                        $.posterselect.counter));
+                        'name', 'flashVars').attr('value', flashvars));
+                popup.videoduration.append($('<embed>').attr('type',
+                            'application/x-shockwave-flash').attr('src',
+                            o.videoduration_swf).attr('width', '1').attr(
+                            'height','1').attr('flashvars', flashvars));
                 $(document.body).append(popup.videoduration);
             }
 

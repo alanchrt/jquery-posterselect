@@ -145,6 +145,9 @@
                         popup.ok.click(function(event) {
                             event.preventDefault();
                             popup.close();
+                            var new_link = link.attr('href').split('#')[0] +
+                                '#' + popup.slider.time.value;
+                            link.attr('href', new_link);
                             popup.callback(popup.image,
                                 popup.slider.time.value);
                         });

@@ -81,6 +81,7 @@
                 popup.loading = $('<div></div>').addClass(
                         'posterselect-loading');
                 popup.loading.html("Loading...");
+                popup.loading.hide();
                 popup.obj.append(popup.loading);
 
                 // Create the slider

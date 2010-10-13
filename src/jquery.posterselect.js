@@ -37,6 +37,9 @@
                 // Grab link parts
                 var href_parts = link.attr('href').split('#');
 
+                // Set the callback
+                popup.callback = o.callback;
+
                 // Store video information
                 popup.video = {
                     url: href_parts[0]
@@ -48,8 +51,8 @@
                             time: time}, function(response) {
                         if (response.posterselect.image.url) {
                             popup.loading.hide();
-                            popup.preview.attr('src',
-                                response.posterselect.image.url);
+                            popup.image = response.posterselect.image.url;
+                            popup.preview.attr('src', popup.image);
                             popup.preview.show();
                         }
                         else
@@ -138,6 +141,12 @@
                         popup.ok.html("Ok");
                         popup.ok.addClass('ui-widget-content');
                         popup.ok.attr('href', '#ok');
+                        popup.ok.click(function(event) {
+                            event.preventDefault();
+                            popup.close();
+                            popup.callback(popup.image,
+                                popup.slider.time.value);
+                        });
                         popup.obj.append(popup.ok);
 
                         // Create the cancel button
@@ -178,7 +187,7 @@
                 $(document.body).append(popup.videoduration);
 
                 // Get the initial poster frame preview
-                popup.grab(o.time);
+                popup.grab(popup.slider.time.value);
             }
 
             // Apply plugin to each element

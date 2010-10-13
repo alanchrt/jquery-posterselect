@@ -1,57 +1,48 @@
 div.posterselect {
     position: absolute;
     width: 360px;
-    height: 360px;
     padding: 20px;
     background: #ffffff;
-    border: #cccccc 1px solid;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    box-shadow: 3px 3px 10px #aaaaaa;
-    -moz-box-shadow: 3px 3px 10px #aaaaaa;
-    -webkit-box-shadow: 3px 3px 10px #aaaaaa;
+    border: #aaaaaa 3px solid;
     display: none;
 }
 
 div.posterselect div.posterselect-loading {
     position: absolute;
+    left: 184px;
+    bottom: 23px;
     width: 32px;
     height: 0;
     padding: 32px 0 0 0;
     overflow: hidden;
-    top: 150px;
-    left: 184px;
     background: url('graphics/loading.gif') no-repeat 0 0;
 }
 
 div.posterselect img.posterselect-preview {
+    float: left;
     width: 360px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
 }
 
 div.posterselect div.posterselect-slider {
-    position: absolute;
+    float: left;
+    clear: left;
+    margin: 20px 0;
     width: 360px;
-    top: 330px;
 }
 
 div.posterselect div.posterselect-indicator {
-    position: absolute;
-    top: 350px;
-    left: 20px;
+    float: left;
+    clear: left;
+    margin: 0 150px 0 0;
     height: 35px;
     line-height: 35px;
     color: #666666;
 }
 
 div.posterselect a.posterselect-ok {
-    position: absolute;
     display: block;
-    top: 350px;
-    left: 265px;
+    float: left;
+    margin: 0 10px 0 0;
     width: 45px;
     height: 35px;
     line-height: 35px;
@@ -62,10 +53,8 @@ div.posterselect a.posterselect-ok {
 }
 
 div.posterselect a.posterselect-cancel {
-    position: absolute;
     display: block;
-    top: 350px;
-    left: 325px;
+    float: left;
     height: 35px;
     line-height: 35px;
     text-decoration: underline;

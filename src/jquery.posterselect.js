@@ -69,16 +69,16 @@
                     popup.obj.remove();
                 }
 
+                // Create the poster frame preview
+                popup.preview = $('<img>').addClass('posterselect-preview');
+                popup.preview.hide();
+                popup.obj.append(popup.preview);
+
                 // Create the loading placeholder
                 popup.loading = $('<div></div>').addClass(
                         'posterselect-loading');
                 popup.loading.html("Loading...");
                 popup.obj.append(popup.loading);
-
-                // Create the poster frame preview
-                popup.preview = $('<img>').addClass('posterselect-preview');
-                popup.preview.hide();
-                popup.obj.append(popup.preview);
 
                 // Create the slider
                 popup.slider = {
@@ -102,7 +102,6 @@
                             },
                             change: function(event, ui) {
                                 popup.slider.time.set(ui.value);
-                                popup.preview.hide();
                                 popup.loading.show();
                                 popup.grab(ui.value);
                             }

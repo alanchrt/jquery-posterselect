@@ -21,7 +21,9 @@
                 time: '2',
                 conversion_url: './?time=%s',
                 callback: function(image, time) {},
-                videoduration_swf: 'videoduration.swf'
+                posterselect_url: '/',
+                videoduration_swf: 'videoduration.swf',
+                videoduration_url: '/'
             }
 
             // Override the defaults with user settings
@@ -38,6 +40,21 @@
                 // Store video information
                 popup.video = {
                     url: href_parts[0]
+                }
+
+                popup.grab = function(time) {
+                    // Grab a poster frame
+                    $.get(o.posterselect_url, {url: popup.video.url,
+                            time: time}, function(response) {
+                        if (response.posterselect.image.url) {
+                            popup.loading.hide();
+                            popup.preview.attr('src',
+                                response.posterselect.image.url);
+                            popup.preview.show();
+                        }
+                        else
+                            alert("We were unable to grab a poster frame.");
+                    }, 'json');
                 }
 
                 // Create the popup object
@@ -57,6 +74,11 @@
                         'posterselect-loading');
                 popup.loading.html("Loading...");
                 popup.obj.append(popup.loading);
+
+                // Create the poster frame preview
+                popup.preview = $('<img>').addClass('posterselect-preview');
+                popup.preview.hide();
+                popup.obj.append(popup.preview);
 
                 // Create the slider
                 popup.slider = {
@@ -80,6 +102,9 @@
                             },
                             change: function(event, ui) {
                                 popup.slider.time.set(ui.value);
+                                popup.preview.hide();
+                                popup.loading.show();
+                                popup.grab(ui.value);
                             }
                         });
                         popup.obj.append(popup.slider.obj);
@@ -152,6 +177,9 @@
                             o.videoduration_swf).attr('width', '1').attr(
                             'height','1').attr('flashvars', flashvars));
                 $(document.body).append(popup.videoduration);
+
+                // Get the initial poster frame preview
+                popup.grab(o.time);
             }
 
             // Apply plugin to each element

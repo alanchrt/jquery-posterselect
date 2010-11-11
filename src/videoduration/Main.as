@@ -7,6 +7,7 @@ package {
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.external.ExternalInterface;
+	import flash.media.SoundTransform;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
@@ -94,6 +95,7 @@ package {
 					_netStream.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler, false, 0, true);
 					_netStream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler, false, 0, true);
 					_netStream.client = this;
+					_netStream.soundTransform = new SoundTransform(0);
 					_video = new Video();
 					_video.attachNetStream(_netStream);
 					_netStream.play(_videoUrl);

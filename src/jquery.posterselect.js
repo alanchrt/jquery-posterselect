@@ -6,7 +6,8 @@
         init_slider: function(index, duration) {
             var popup = $.posterselect.popups[index];
             popup.slider.init(Math.floor(duration));
-            popup.videoduration.remove();
+            if (popup.videoduration)
+                popup.videoduration.remove();
         }
     }
 
@@ -23,7 +24,7 @@
                 callback: function(image, time) {},
                 posterselect_url: '/',
                 videoduration_swf: 'videoduration.swf',
-                videoduration_url: '/'
+                videoduration_url: null
             }
 
             // Override the defaults with user settings
@@ -166,29 +167,42 @@
                     }
                 }
 
-                // Add the video duration sniffer
-                var flashvars = 'url=' + escape(popup.video.url) +
-                        '&callback=jQuery.posterselect.init_slider&index=' +
-                        $.posterselect.counter;
-                popup.videoduration = $('<object></object');
-                popup.videoduration.attr('classid',
-                        'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
-                popup.videoduration.attr('codebase',
-                        'http://fpdownload.macromedia.com/pub/shockwave/' +
-                        'cabs/flash/swflash.cab#version=10,0,0,0')
-                popup.videoduration.attr('width', '1');
-                popup.videoduration.attr('height', '1');
-                popup.videoduration.append($('<param>').attr(
-                        'name', 'movie').attr('value', o.videoduration_swf));
-                popup.videoduration.append($('<param>').attr(
-                        'name', 'allowScriptAccess').attr('value', 'always'));
-                popup.videoduration.append($('<param>').attr(
-                        'name', 'flashVars').attr('value', flashvars));
-                popup.videoduration.append($('<embed>').attr('type',
+                if (o.videoduration_url) {
+                    // Request video duration from url
+                    var posterselect_counter = $.posterselect.counter;
+                    $.get(o.videoduration_url, {url: popup.video.url},
+                            function(response) {
+                        $.posterselect.init_slider(posterselect_counter,
+                            response.videoduration.video.duration);
+                    }, 'json');
+                }
+                else {
+                    // Add the Flash video duration sniffer
+                    var flashvars = 'url=' + escape(popup.video.url) +
+                            '&callback=jQuery.posterselect.init_slider' +
+                            '&index=' + $.posterselect.counter;
+                    popup.videoduration = $('<object></object');
+                    popup.videoduration.attr('classid',
+                            'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
+                    popup.videoduration.attr('codebase',
+                            'http://fpdownload.macromedia.com/pub/shockwave/' +
+                            'cabs/flash/swflash.cab#version=10,0,0,0')
+                    popup.videoduration.attr('width', '1');
+                    popup.videoduration.attr('height', '1');
+                    popup.videoduration.append($('<param>').attr(
+                            'name', 'movie').attr('value',
+                            o.videoduration_swf));
+                    popup.videoduration.append($('<param>').attr(
+                            'name', 'allowScriptAccess').attr('value',
+                            'always'));
+                    popup.videoduration.append($('<param>').attr(
+                            'name', 'flashVars').attr('value', flashvars));
+                    popup.videoduration.append($('<embed>').attr('type',
                             'application/x-shockwave-flash').attr('src',
                             o.videoduration_swf).attr('width', '1').attr(
                             'height','1').attr('flashvars', flashvars));
-                $(document.body).append(popup.videoduration);
+                    $(document.body).append(popup.videoduration);
+                }
 
                 // Get the initial poster frame preview
                 popup.grab(popup.slider.time.value);

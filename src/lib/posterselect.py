@@ -36,15 +36,30 @@ class Posterselect():
         """Determines the poster image url from its filename."""
         return self.poster_url + destination_filename
 
-    def run(self, source_path, destination_path, time):
+    def ffmpeg(self, source_path, destination_path, time):
         """Runs the ffmpeg command to extract the poster image."""
         hms_time = str(datetime.timedelta(seconds=time))
-        if not os.path.exists(destination_path):
-            cmd = ('ffmpeg', '-i', source_path, '-vframes', '1', '-ss',
-                   hms_time, '-f', 'image2', '-vcodec', 'mjpeg',
-                   destination_path)
-            print ' '.join(cmd)
-            subprocess.Popen(cmd)
+        try:
+            if not os.path.exists(destination_path):
+                cmd = ('ffmpeg', '-i', source_path, '-vframes', '1', '-ss',
+                       hms_time, '-f', 'image2', '-vcodec', 'mjpeg',
+                       destination_path)
+                subprocess.Popen(cmd)
+        except:
+            pass
+
+    def ffprobe(self, source_path):
+        """Runs the ffprobe command to determine the video duration."""
+        try:
+            cmd = ('ffprobe', '-show_streams', source_path)
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+            output = proc.communicate()[0]
+            print output
+            for line in output.splitlines():
+                if line.startswith('duration='):
+                    return line.replace('duration=', '')
+        except: 
+            return "0"
 
     def extract(self, url, time):
         """Extracts a poster image from the video at the specified time."""
@@ -52,8 +67,14 @@ class Posterselect():
         source_path = self.source_path(source_filename)
         destination_filename = self.destination_filename(source_path, time)
         destination_path = self.destination_path(destination_filename)
-        self.run(source_path, destination_path, time)
+        self.ffmpeg(source_path, destination_path, time)
         return self.destination_url(destination_filename)
+
+    def sniff(self, url):
+        """Sniffs the video duration from the video."""
+        source_filename = self.source_filename(url)
+        source_path = self.source_path(source_filename)
+        return self.ffprobe(source_path)
 
     def posterselect(self, url, time):
         """
@@ -75,4 +96,22 @@ class Posterselect():
             'source_url': url,
             'time': time,
             'destination_url': destination_url,
+        }
+
+    def videoduration(self, url):
+        """
+        Determines the video duration and returns a json string for the jQuery
+        plugin.
+        """
+        duration = self.sniff(url)
+        return """{
+            "videoduration": {
+                "video": {
+                    "url": "%(source_url)s",
+                    "duration": %(duration)s
+                }
+            }
+        }""" % {
+            'source_url': url,
+            'duration': duration,
         }

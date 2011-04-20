@@ -36,17 +36,14 @@ class Posterselect():
         """Determines the poster image url from its filename."""
         return self.poster_url + destination_filename
 
-    def ffmpeg(self, source_path, destination_path, time):
+    def run(self, source_path, destination_path, time):
         """Runs the ffmpeg command to extract the poster image."""
         hms_time = str(datetime.timedelta(seconds=time))
-        try:
-            if not os.path.exists(destination_path):
-                cmd = ('ffmpeg', '-i', source_path, '-vframes', '1', '-ss',
-                       hms_time, '-f', 'image2', '-vcodec', 'mjpeg',
-                       destination_path)
-                subprocess.Popen(cmd)
-        except:
-            pass
+        if not os.path.exists(destination_path):
+            cmd = ('ffmpeg', '-i', source_path, '-vframes', '1', '-ss',
+                   hms_time, '-f', 'image2', '-vcodec', 'mjpeg',
+                   destination_path)
+            subprocess.call(cmd)
 
     def ffprobe(self, source_path):
         """Runs the ffprobe command to determine the video duration."""
@@ -58,7 +55,7 @@ class Posterselect():
             for line in output.splitlines():
                 if line.startswith('duration='):
                     return line.replace('duration=', '')
-        except: 
+        except:
             return "0"
 
     def extract(self, url, time):
@@ -67,7 +64,7 @@ class Posterselect():
         source_path = self.source_path(source_filename)
         destination_filename = self.destination_filename(source_path, time)
         destination_path = self.destination_path(destination_filename)
-        self.ffmpeg(source_path, destination_path, time)
+        self.run(source_path, destination_path, time)
         return self.destination_url(destination_filename)
 
     def sniff(self, url):
